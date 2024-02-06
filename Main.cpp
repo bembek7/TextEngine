@@ -9,29 +9,18 @@
 
 int main()
 {
-    /*
-    openai::start("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");
-
-    auto chat = openai::chat().create(R"(
-    {
-        "model": "gpt-3.5-turbo",
-        "messages":[{"role":"user", "content":"blah"}],
-        "max_tokens": 7,
-        "temperature": 0
-    }
-    )"_json);
-    std::cout << "Response is:\n" << chat.dump(2) << '\n';
-	*/
     Game game;
 
     CommandsController cc(game);
-    Room room("You've entered the left room.");
+   /* Room room("You've entered the left room.");
     Room room2("You've entered the right room.");
-    room.AddRoomLink("go right", &room2);
-    room2.AddRoomLink("go left", &room);
+    room.AddRoomLink("go right", 1);
+    room2.AddRoomLink("go left", 0);
     game.AddRoom(room);
-    game.AddRoom(room2);
+    game.AddRoom(room2);*/
+    
 
+    game.LoadGame();
     game.Start();
 	while (true)
 	{
@@ -39,6 +28,5 @@ int main()
         std::getline(std::cin, com);
 		if (cc.ProcessInput(com) != 0) break;
 	}
-
 	return 0;
 }

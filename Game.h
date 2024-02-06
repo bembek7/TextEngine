@@ -5,11 +5,18 @@
 class Game
 {
 public:
+	friend class CommandsController;
+
 	void AddRoom(const Room& room) noexcept;
-	int TryAdvanceRoom(const std::string& message) noexcept;
 	void Start() noexcept;
+	void LoadGame() noexcept;
+
+private:
+	int TryAdvanceRoom(const std::string& message) noexcept;
+	void SaveGame() const noexcept;
+
 private:
 	std::vector<std::unique_ptr<Room>>rooms;
-	Room* currentRoom = nullptr;
+	unsigned int currentRoomIndex = 0;
 };
 

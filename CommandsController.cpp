@@ -28,6 +28,10 @@ int CommandsController::ProcessCommand(Command translatedCommand) const noexcept
 		std::cout << "Quitting the game now." << std::endl;
 		return -1;
 		break;
+	case Save:
+		game.SaveGame();
+		std::cout << "Saving the game ..." << std::endl;
+		break;
 	case Help:
 		std::cout << "Possible commands are:" << std::endl;
 		for (const auto& a : commandMap)
