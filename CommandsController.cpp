@@ -20,7 +20,7 @@ int CommandsController::ProcessInput(const std::string& input) const noexcept
 	}
 }
 
-int CommandsController::ProcessCommand(Command translatedCommand) const noexcept
+int CommandsController::ProcessCommand(CommandID translatedCommand) const noexcept
 {
 	switch (translatedCommand)
 	{
@@ -30,13 +30,41 @@ int CommandsController::ProcessCommand(Command translatedCommand) const noexcept
 		break;
 	case Save:
 		game.SaveGame();
-		std::cout << "Saving the game ..." << std::endl;
+		std::cout << "Saved the game" << std::endl;
+		break;
+	case Load:
+		std::cout << "Loading the game ..." << std::endl;
+		try
+		{
+			game.LoadLast();
+		}
+		catch (const std::exception& e)
+		{
+			std::cerr << "Error: " << e.what() << std::endl;
+			break;
+		}
+		std::cout << "Successfully loaded the game." << std::endl;
+		game.Start();
+		break;
+	case New:
+		std::cout << "Starting new game ..." << std::endl;
+		try
+		{
+			game.LoadNew();
+		}
+		catch (const std::exception& e)
+		{
+			std::cerr << "Error: " << e.what() << std::endl;
+			break;
+		}
+		std::cout << "Successfully started the game." << std::endl;
+		game.Start();
 		break;
 	case Help:
 		std::cout << "Possible commands are:" << std::endl;
-		for (const auto& a : commandMap)
+		for (const auto& com : commands)
 		{
-			std::cout << "\t/" << a.first << std::endl;
+			std::cout << "\t/" << com.name << " - " << com.description << std::endl;
 		}
 		break;
 	case Unkown:
@@ -50,31 +78,39 @@ int CommandsController::ProcessCommand(Command translatedCommand) const noexcept
 
 int CommandsController::ProcessMessage(const std::string& message) const noexcept
 {
-	if (game.TryAdvanceRoom(message) == 0)
+	if (game.IsStarted())
 	{
-		;
+		if (game.TryAdvanceRoom(message) == 0)
+		{
+			;
+		}
+		else
+		{
+			std::cout << "No response." << std::endl;
+		}
 	}
 	else
 	{
-		std::cout << "No response." << std::endl;
+		std::cout << "There is no game loaded. Use \"/load\" command to load last saved game or \"/new\" to start a new game." << std::endl;
 	}
 	return 0;
 }
 
-Command CommandsController::TranslateToCommand(std::string command) const noexcept
+CommandID CommandsController::TranslateToCommand(std::string input) const noexcept
 {
-	command.erase(command.begin());
-	std::transform(command.begin(), command.end(), command.begin(),
+	input.erase(input.begin());
+	std::transform(input.begin(), input.end(), input.begin(),
 		[](char c) { return std::tolower(c); });
-	std::erase_if(command, [](char x)
+	std::erase_if(input, [](char x)
 	{
 		return x == ' ' or x == '\n' or x == '\t';
 	});
-	auto it = commandMap.find(command);
-	if (it != commandMap.end()) {
-		return it->second;
+	for (const auto& com : commands)
+	{
+		if (input == com.name)
+		{
+			return com.ID;
+		}
 	}
-	else {
-		return Unkown;
-	}
+	return Unkown;
 }

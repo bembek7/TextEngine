@@ -13,7 +13,7 @@ public:
 	void AddRoomLink(const std::string& messageThatLinks, unsigned int roomIndex) noexcept;
 	int FindRoomUnderMessage(const std::string& message) noexcept;
 	void SaveRoom(std::ofstream& file) const noexcept;
-	void LoadRoom(std::ifstream& file) noexcept;
+	void LoadRoom(std::ifstream& file);
 
 public:
 

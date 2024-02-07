@@ -23,6 +23,7 @@ int Game::TryAdvanceRoom(const std::string& message) noexcept
 
 void Game::Start() noexcept
 {
+	started = true;
 	rooms[currentRoomIndex]->Enter();
 }
 
@@ -39,9 +40,28 @@ void Game::SaveGame() const noexcept
 	file.close();
 }
 
-void Game::LoadGame() noexcept
+bool Game::IsStarted() const noexcept
 {
-	std::ifstream file("Save", std::ios::binary);
+	return started;
+}
+
+void Game::LoadLast()
+{
+	LoadGame("Save");
+}
+
+void Game::LoadNew()
+{
+	LoadGame("DefaultStart");
+}
+
+void Game::LoadGame(const std::string& fileName)
+{
+	std::ifstream file(fileName, std::ios::binary);
+	if (!file.is_open())
+	{
+		throw std::runtime_error("Couldn't find the save file.");
+	}
 	size_t roomsNr;
 	file.read(reinterpret_cast<char*>(&roomsNr), sizeof(roomsNr));
 	for (size_t i = 0; i < roomsNr; i++)

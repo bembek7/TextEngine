@@ -3,12 +3,21 @@
 #include <unordered_map>
 #include "Game.h"
 
-enum Command
+enum CommandID
 {
 	Quit,
 	Save,
+	Load,
+	New,
 	Help,
 	Unkown
+};
+
+struct Command
+{
+	CommandID ID;
+	std::string name;
+	std::string description;
 };
 
 class CommandsController
@@ -17,19 +26,20 @@ public:
 	CommandsController(Game& game);
 	int ProcessInput(const std::string& input) const noexcept;
 private:
-	int ProcessCommand(Command translatedCommand) const noexcept;
+	int ProcessCommand(CommandID translatedCommand) const noexcept;
 	int ProcessMessage(const std::string& message) const noexcept;
-	Command TranslateToCommand(std::string command) const noexcept;
+	CommandID TranslateToCommand(std::string input) const noexcept;
 public:
 
 private:
 	Game& game;
-	std::unordered_map<std::string, Command> commandMap = {
-		{"quit", Quit},
-		{"save", Save},
-		//{"load", Load},
-		//{"new", New},
-		{"help", Help}
+	std::vector<Command>commands =
+	{
+		{Quit, "quit", "quits the game without saving"},
+		{Save, "save", "saves the current state of the game"},
+		{Load, "load", "loads the last saved game"},
+		{New, "new", "starts the new game"},
+		{Help, "help", "lists all possible commands"}
 	};
 };
 

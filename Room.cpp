@@ -48,7 +48,7 @@ void Room::SaveRoom(std::ofstream& file) const noexcept
 	file.write(description.c_str(), descriptionSize);
 }
 
-void Room::LoadRoom(std::ifstream& file) noexcept
+void Room::LoadRoom(std::ifstream& file)
 {
 	size_t linksNr;
 	file.read(reinterpret_cast<char*>(&linksNr), sizeof(linksNr));

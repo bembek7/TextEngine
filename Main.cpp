@@ -19,9 +19,7 @@ int main()
     game.AddRoom(room);
     game.AddRoom(room2);*/
     
-
-    game.LoadGame();
-    game.Start();
+    std::cout << "Program started. Ready for input." << std::endl;
 	while (true)
 	{
 		std::string com;
