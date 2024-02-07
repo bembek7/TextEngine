@@ -10,15 +10,16 @@
 int main()
 {
     Game game;
-
     CommandsController cc(game);
-   /* Room room("You've entered the left room.");
+    
+    /*Room room("You've entered the left room.");
     Room room2("You've entered the right room.");
     room.AddRoomLink("go right", 1);
+    room.AddAdditionalDescription("I inspect", "You inspected.");
     room2.AddRoomLink("go left", 0);
     game.AddRoom(room);
-    game.AddRoom(room2);*/
-    
+    game.AddRoom(room2);
+    game.SaveGame();*/
     std::cout << "Program started. Ready for input." << std::endl;
 	while (true)
 	{

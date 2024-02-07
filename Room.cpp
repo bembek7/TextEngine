@@ -19,6 +19,11 @@ void Room::AddRoomLink(const std::string& messageThatLinks, unsigned int roomInd
 	links.emplace(messageThatLinks, roomIndex);
 }
 
+void Room::AddAdditionalDescription(const std::string& messageThatLinks, const std::string& description) noexcept
+{
+	additionalDescriptions.emplace(messageThatLinks, description);
+}
+
 int Room::FindRoomUnderMessage(const std::string& message) noexcept
 {
 	const auto it = links.find(message);
@@ -29,6 +34,20 @@ int Room::FindRoomUnderMessage(const std::string& message) noexcept
 	else
 	{
 		return -1;
+	}
+}
+
+bool Room::TryAction(const std::string& message) noexcept
+{
+	const auto it = additionalDescriptions.find(message);
+	if (it != additionalDescriptions.end())
+	{
+		std::cout << it->second << std::endl;
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

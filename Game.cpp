@@ -6,19 +6,24 @@ void Game::AddRoom(const Room& room) noexcept
 	rooms.push_back(std::make_unique<Room>(room));
 }
 
-int Game::TryAdvanceRoom(const std::string& message) noexcept
+bool Game::TryAdvanceRoom(const std::string& message) noexcept
 {
 	int nextRoomIndex = rooms[currentRoomIndex]->FindRoomUnderMessage(message);
 	if (nextRoomIndex >= 0)
 	{
 		currentRoomIndex = nextRoomIndex;
 		rooms[currentRoomIndex]->Enter();
+		return true;
 	}
 	else
 	{
-		return -1;
+		return false;
 	}
-	return 0;
+}
+
+bool Game::TryAction(const std::string& message) noexcept
+{
+	return rooms[currentRoomIndex]->TryAction(message);
 }
 
 void Game::Start() noexcept

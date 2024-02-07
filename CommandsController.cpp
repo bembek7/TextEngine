@@ -80,13 +80,12 @@ int CommandsController::ProcessMessage(const std::string& message) const noexcep
 {
 	if (game.IsStarted())
 	{
-		if (game.TryAdvanceRoom(message) == 0)
+		if (!game.TryAdvanceRoom(message))
 		{
-			;
-		}
-		else
-		{
-			std::cout << "No response." << std::endl;
+			if (!game.TryAction(message))
+			{
+				std::cout << "No response." << std::endl;
+			}
 		}
 	}
 	else

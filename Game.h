@@ -7,7 +7,8 @@ class Game
 public:
 	void AddRoom(const Room& room) noexcept;
 	void Start() noexcept;
-	int TryAdvanceRoom(const std::string& message) noexcept;
+	bool TryAdvanceRoom(const std::string& message) noexcept;
+	bool TryAction(const std::string& message) noexcept;
 	void SaveGame() const noexcept;
 	bool IsStarted() const noexcept;
 	void LoadLast();
