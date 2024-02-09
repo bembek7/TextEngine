@@ -19,6 +19,8 @@ int main()
     room2.AddRoomLink("go left", 0);
     game.AddRoom(room);
     game.AddRoom(room2);
+    game.FindItem(Item("Key", "an old, rusty key"));
+    game.FindItem(Item("Journal", "journal of J. Smith"));
     game.SaveGame();*/
     std::cout << "Program started. Ready for input." << std::endl;
 	while (true)

@@ -60,6 +60,9 @@ int CommandsController::ProcessCommand(CommandID translatedCommand) const noexce
 		std::cout << "Successfully started the game." << std::endl;
 		game.Start();
 		break;
+	case Inventory:
+		game.PrintInventory();
+		break;
 	case Help:
 		std::cout << "Possible commands are:" << std::endl;
 		for (const auto& com : commands)

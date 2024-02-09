@@ -1,7 +1,7 @@
 #include "Room.h"
 #include <iostream>
-#include "Game.h"
 #include <fstream>
+#include "SaveSystem.h"
 
 Room::Room(const std::string& entryDescription) noexcept :
 	description(entryDescription)
@@ -55,16 +55,19 @@ void Room::SaveRoom(std::ofstream& file) const noexcept
 {
 	auto linksSize = links.size();
 	file.write(reinterpret_cast<const char*>(&linksSize), sizeof(linksSize));
-	for (const auto& item : links)
+	for (const auto& links : links)
 	{
-		auto linkingMessageSize = item.first.size() + 1; // incrementing because of null termination sign
-		file.write(reinterpret_cast<const char*>(&linkingMessageSize), sizeof(linkingMessageSize));
-		file.write(item.first.c_str(), linkingMessageSize);
-		file.write(reinterpret_cast<const char*>(&item.second), sizeof(item.second));
+		SaveSystem::SaveString(file, links.first);
+		file.write(reinterpret_cast<const char*>(&links.second), sizeof(links.second));
 	}
-	auto descriptionSize = description.size() + 1; // incrementing because of null termination sign
-	file.write(reinterpret_cast<const char*>(&descriptionSize), sizeof(descriptionSize));
-	file.write(description.c_str(), descriptionSize);
+	auto additionalDescriptionsSize = additionalDescriptions.size();
+	file.write(reinterpret_cast<const char*>(&additionalDescriptionsSize), sizeof(additionalDescriptionsSize));
+	for (const auto& additionalDescription : additionalDescriptions)
+	{
+		SaveSystem::SaveString(file, additionalDescription.first);
+		SaveSystem::SaveString(file, additionalDescription.second);
+	}
+	SaveSystem::SaveString(file, description);
 }
 
 void Room::LoadRoom(std::ifstream& file)
@@ -73,18 +76,18 @@ void Room::LoadRoom(std::ifstream& file)
 	file.read(reinterpret_cast<char*>(&linksNr), sizeof(linksNr));
 	for (size_t i = 0; i < linksNr; i++)
 	{
-		size_t linkingMessageSize;
-		std::string linkingMessage;
+		std::string linkingMessage = SaveSystem::LoadString(file);
 		unsigned int linkedRoomIndex;
-		file.read(reinterpret_cast<char*>(&linkingMessageSize), sizeof(linkingMessageSize));
-		char* messageBuffer = new char[linkingMessageSize];
-		file.read(messageBuffer, linkingMessageSize);
 		file.read(reinterpret_cast<char*>(&linkedRoomIndex), sizeof(linkedRoomIndex));
-		links.emplace(messageBuffer, linkedRoomIndex);
+		links.emplace(linkingMessage, linkedRoomIndex);
 	}
-	size_t descriptionSize;
-	file.read(reinterpret_cast<char*>(&descriptionSize), sizeof(descriptionSize));
-	char* descriptionBuffer = new char[descriptionSize];
-	file.read(descriptionBuffer, descriptionSize);
-	description = descriptionBuffer;
+	size_t additionalDescriptionsNr;
+	file.read(reinterpret_cast<char*>(&additionalDescriptionsNr), sizeof(additionalDescriptionsNr));
+	for (size_t i = 0; i < additionalDescriptionsNr; i++)
+	{
+		auto keyMessage = SaveSystem::LoadString(file);
+		auto messageResponse = SaveSystem::LoadString(file);
+		additionalDescriptions.emplace(keyMessage, messageResponse);
+	}
+	description = SaveSystem::LoadString(file);
 }

@@ -9,6 +9,7 @@ enum CommandID
 	Save,
 	Load,
 	New,
+	Inventory,
 	Help,
 	Unkown
 };
@@ -39,6 +40,7 @@ private:
 		{Save, "save", "saves the current state of the game"},
 		{Load, "load", "loads the last saved game"},
 		{New, "new", "starts the new game"},
+		{Inventory, "inventory", "shows what you have found so far"},
 		{Help, "help", "lists all possible commands"}
 	};
 };

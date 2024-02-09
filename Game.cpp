@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <fstream>
+#include <iostream>
 
 void Game::AddRoom(const Room& room) noexcept
 {
@@ -35,6 +36,7 @@ void Game::Start() noexcept
 void Game::SaveGame() const noexcept
 {
 	std::ofstream file("Save", std::ios::binary);
+	player.SavePlayer(file);
 	auto roomsSize = rooms.size();
 	file.write(reinterpret_cast<const char*>(&roomsSize), sizeof(roomsSize));
 	for (const auto& room : rooms)
@@ -60,6 +62,17 @@ void Game::LoadNew()
 	LoadGame("DefaultStart");
 }
 
+void Game::PrintInventory() const noexcept
+{
+	player.PrintInventory();
+}
+
+void Game::FindItem(Item&& item) noexcept
+{
+	std::cout << "You found " << item.GetName() << "!" << std::endl;
+	player.AddItem(std::move(item));
+}
+
 void Game::LoadGame(const std::string& fileName)
 {
 	std::ifstream file(fileName, std::ios::binary);
@@ -67,6 +80,8 @@ void Game::LoadGame(const std::string& fileName)
 	{
 		throw std::runtime_error("Couldn't find the save file.");
 	}
+	player = Player();
+	player.LoadPlayer(file);
 	size_t roomsNr;
 	file.read(reinterpret_cast<char*>(&roomsNr), sizeof(roomsNr));
 	for (size_t i = 0; i < roomsNr; i++)

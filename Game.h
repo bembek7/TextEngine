@@ -1,6 +1,7 @@
 #pragma once
 #include "Room.h"
 #include <memory>
+#include "Player.h"
 
 class Game
 {
@@ -13,11 +14,14 @@ public:
 	bool IsStarted() const noexcept;
 	void LoadLast();
 	void LoadNew();
+	void PrintInventory() const noexcept;
+	void FindItem(Item&& item) noexcept;
 
 private:
 	void LoadGame(const std::string& fileName);
 
 private:
+	Player player;
 	std::vector<std::unique_ptr<Room>>rooms;
 	unsigned int currentRoomIndex = 0;
 	bool started = false;

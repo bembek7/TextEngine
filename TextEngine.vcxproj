@@ -146,14 +146,20 @@
   <ItemGroup>
     <ClCompile Include="CommandsController.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="SaveSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandsController.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="SaveSystem.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="openai.hpp" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
