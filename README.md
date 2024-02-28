@@ -1,5 +1,5 @@
 # TextEngine
-IN DEVELOPMENT
+DEVELOPMENT ON HOLD
 
 My plan is to create an engine for old-school text-based adventure games.
 
